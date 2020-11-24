@@ -1,7 +1,7 @@
 package com.example.jaimequeraltgarrigos.spotify_artist.data.network
 
+import androidx.lifecycle.LiveData
 import com.example.jaimequeraltgarrigos.spotify_artist.data.database.Album
-import kotlinx.coroutines.flow.Flow
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -12,9 +12,10 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-const val BASE_URL = "https://api.spotify.com/v1"
+const val BASE_URL = "https://api.spotify.com/"
 private val service: MainNetwork by lazy {
-    val token: String? = ""
+    val token: String? =
+        "BQA_drvnVjXvVTzznPfrRhtJgwioXnvk87DvwF5bqawghlxo5ndeIkcoQ1AhUWnoWIMLewqzs4V1PFI5V-ariT1QFHiKUjpMf6_EF8m2SbT6UjJmMVICrQl22dW01Bq8x4MvZt-Q2vmZm0ihYj0O5szU"
 
     val okHttpClient = OkHttpClient.Builder()
         .addInterceptor(MyRetrofitInterceptor(token))
@@ -32,16 +33,16 @@ private val service: MainNetwork by lazy {
 fun getNetworkService() = service
 
 interface MainNetwork {
-    @GET("/search")
+    @GET("v1/search")
     suspend fun fetchArtists(
         @Query("q") query: String,
         @Query("type") type: String = "artist"
-    ): Flow<List<NetworkArtist>>
+    ): List<NetworkArtist>
 
     @GET("artists/{id}/albums")
-    suspend fun fetchAbums(
+    suspend fun fetchAlbums(
         @Path("id") id: String
-    ): Flow<List<Album>>
+    ): List<Album>
 }
 
 class MyRetrofitInterceptor(private val token: String?) : Interceptor {
@@ -49,7 +50,7 @@ class MyRetrofitInterceptor(private val token: String?) : Interceptor {
         val originalRequest = chain.request()
         if (token != null) {
             val newRequest: Request = originalRequest.newBuilder()
-                .header("Authorization Bearer", token)
+                .header("Authorization", "Bearer $token")
                 .build()
 
             return chain.proceed(newRequest)

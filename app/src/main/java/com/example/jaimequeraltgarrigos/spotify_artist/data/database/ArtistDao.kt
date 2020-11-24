@@ -1,13 +1,14 @@
 package com.example.jaimequeraltgarrigos.spotify_artist.data.database
 
-import androidx.room.Dao
-import androidx.room.Query
-import androidx.room.Transaction
-import kotlinx.coroutines.flow.Flow
+import androidx.lifecycle.LiveData
+import androidx.room.*
 
 @Dao
 interface ArtistDao {
     @Transaction
     @Query("SELECT * FROM Artist")
-    fun getArtistWithAlbum(): Flow<List<ArtistWithAlbums>>
+    fun getArtistWithAlbum(): LiveData<List<ArtistWithAlbums>>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertArtistsWithAlbums(artists: List<Artist>)
 }
