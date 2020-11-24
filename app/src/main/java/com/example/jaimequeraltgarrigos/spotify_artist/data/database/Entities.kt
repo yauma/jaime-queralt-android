@@ -1,4 +1,4 @@
-package com.example.jaimequeraltgarrigos.spotify_artist.data.entity.db_entities
+package com.example.jaimequeraltgarrigos.spotify_artist.data.database
 
 import androidx.room.Embedded
 import androidx.room.Entity

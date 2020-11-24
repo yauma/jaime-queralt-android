@@ -1,4 +1,4 @@
-package com.example.jaimequeraltgarrigos.spotify_artist.data.entity.network_entitites
+package com.example.jaimequeraltgarrigos.spotify_artist.data.network
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
