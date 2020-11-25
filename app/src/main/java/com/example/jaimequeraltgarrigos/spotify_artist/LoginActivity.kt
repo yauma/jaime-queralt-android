@@ -3,6 +3,7 @@ package com.example.jaimequeraltgarrigos.spotify_artist
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.example.jaimequeraltgarrigos.spotify_artist.utils.TokenManager
 import com.spotify.sdk.android.auth.AuthorizationClient
 import com.spotify.sdk.android.auth.AuthorizationRequest
 import com.spotify.sdk.android.auth.AuthorizationResponse
@@ -10,6 +11,7 @@ import com.spotify.sdk.android.auth.AuthorizationResponse
 
 class LoginActivity : AppCompatActivity() {
     private var mAccessToken: String = ""
+    private lateinit var myApplication: MyApplication
 
     companion object {
         private const val CLIENT_ID = "972b5264690045fba3744ed1adebf270"
@@ -23,6 +25,7 @@ class LoginActivity : AppCompatActivity() {
         val request: AuthorizationRequest =
             getAuthenticationRequest(AuthorizationResponse.Type.TOKEN)
         AuthorizationClient.openLoginActivity(this, AUTH_TOKEN_REQUEST_CODE, request)
+        myApplication = application as MyApplication
     }
 
     private fun getAuthenticationRequest(type: AuthorizationResponse.Type): AuthorizationRequest {
@@ -45,6 +48,7 @@ class LoginActivity : AppCompatActivity() {
             //TODO set error message
         } else if (requestCode == AUTH_TOKEN_REQUEST_CODE) {
             mAccessToken = response.accessToken
+            TokenManager.token = mAccessToken
             navigateToMainActivity(mAccessToken)
         }
     }

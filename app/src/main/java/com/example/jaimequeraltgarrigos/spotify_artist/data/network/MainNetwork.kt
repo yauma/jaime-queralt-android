@@ -1,25 +1,33 @@
 package com.example.jaimequeraltgarrigos.spotify_artist.data.network
 
-import androidx.lifecycle.LiveData
-import com.example.jaimequeraltgarrigos.spotify_artist.data.database.Album
+import android.content.SharedPreferences
+import com.example.jaimequeraltgarrigos.spotify_artist.data.network.network_entities.albums.AlbumsResponse
+import com.example.jaimequeraltgarrigos.spotify_artist.data.network.network_entities.artists.ArtistSearchResponse
+import com.example.jaimequeraltgarrigos.spotify_artist.utils.TokenManager
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
+import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.http.*
 
 const val BASE_URL = "https://api.spotify.com/"
 private val service: MainNetwork by lazy {
-    val token: String? =
-        "BQA_drvnVjXvVTzznPfrRhtJgwioXnvk87DvwF5bqawghlxo5ndeIkcoQ1AhUWnoWIMLewqzs4V1PFI5V-ariT1QFHiKUjpMf6_EF8m2SbT6UjJmMVICrQl22dW01Bq8x4MvZt-Q2vmZm0ihYj0O5szU"
 
     val okHttpClient = OkHttpClient.Builder()
-        .addInterceptor(MyRetrofitInterceptor(token))
+        .addInterceptor(MyRetrofitInterceptor(TokenManager.token))
         .build()
+
+    val interceptor: HttpLoggingInterceptor = HttpLoggingInterceptor().apply {
+        this.level = HttpLoggingInterceptor.Level.BODY
+    }
+
+    val client: OkHttpClient = OkHttpClient.Builder().apply {
+        this.addInterceptor(interceptor)
+    }.build()
 
     val retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)
@@ -36,13 +44,12 @@ interface MainNetwork {
     @GET("v1/search")
     suspend fun fetchArtists(
         @Query("q") query: String,
-        @Query("type") type: String = "artist"
-    ): List<NetworkArtist>
+        @Query("type") type: String = "artist",
+        @Query("limit") limit: Int = 5
+    ): ArtistSearchResponse
 
-    @GET("artists/{id}/albums")
-    suspend fun fetchAlbums(
-        @Path("id") id: String
-    ): List<Album>
+    @GET("v1/artists/{id}/albums")
+    suspend fun getAlbums(@Path("id") id: String): AlbumsResponse
 }
 
 class MyRetrofitInterceptor(private val token: String?) : Interceptor {

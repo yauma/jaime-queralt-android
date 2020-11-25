@@ -1,6 +1,7 @@
 package com.example.jaimequeraltgarrigos.spotify_artist.di
 
 import android.app.Application
+import com.example.jaimequeraltgarrigos.spotify_artist.MyApplication
 import com.example.jaimequeraltgarrigos.spotify_artist.data.database.ArtistDataBase
 import com.example.jaimequeraltgarrigos.spotify_artist.data.database.getDatabase
 import com.example.jaimequeraltgarrigos.spotify_artist.data.network.MainNetwork
