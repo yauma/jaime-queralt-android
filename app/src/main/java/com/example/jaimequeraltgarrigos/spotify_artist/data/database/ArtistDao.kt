@@ -11,4 +11,10 @@ interface ArtistDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertArtistsWithAlbums(artists: List<Artist>)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertArtists(artists: List<Artist>)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAlbums(artists: List<Album>)
 }

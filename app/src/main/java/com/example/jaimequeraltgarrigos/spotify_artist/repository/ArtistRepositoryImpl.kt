@@ -1,9 +1,9 @@
 package com.example.jaimequeraltgarrigos.spotify_artist.repository
 
-import android.app.Application
 import com.example.jaimequeraltgarrigos.spotify_artist.data.database.ArtistDao
 import com.example.jaimequeraltgarrigos.spotify_artist.data.network.MainNetwork
-import com.example.jaimequeraltgarrigos.spotify_artist.data.network.network_entities.albums.Album
+import com.example.jaimequeraltgarrigos.spotify_artist.data.network.network_entities.albums.AlbumAPI
+import com.example.jaimequeraltgarrigos.spotify_artist.utils.mapper.Mapper
 import kotlinx.coroutines.withTimeout
 
 class ArtistRepositoryImpl(
@@ -17,14 +17,14 @@ class ArtistRepositoryImpl(
     override suspend fun fetchArtist(query: String) {
         val artistIds = mutableListOf<String>()
         try {
-            val artists = withTimeout(5000) {
+            val artistsSearchResponse = withTimeout(5000) {
                 network.fetchArtists(query)
             }
-            val alb: List<Album> = artists.artists.items.flatMap {
+            artistDao.insertArtists(Mapper.artistsAPIListToDBEntityList(artistsSearchResponse.artists.items))
+            val albumsApi: List<AlbumAPI> = artistsSearchResponse.artists.items.flatMap {
                 network.getAlbums(it.id).items
             }
-            val i = alb
-            print(i)
+            artistDao.insertAlbums(Mapper.albumAPIListToDBEntityList(albumsApi))
         } catch (error: Throwable) {
             throw ArtistRefreshError("Unable to fetch Artists", error)
         }

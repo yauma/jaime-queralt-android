@@ -2,7 +2,7 @@ package com.example.jaimequeraltgarrigos.spotify_artist.data.network.network_ent
 
 import com.google.gson.annotations.SerializedName
 
-data class Artist (
+data class ArtistAPI (
 	@SerializedName("genres") val genres : List<String>,
 	@SerializedName("href") val href : String,
 	@SerializedName("id") val id : String,

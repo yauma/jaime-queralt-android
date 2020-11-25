@@ -1,14 +1,14 @@
 package com.example.jaimequeraltgarrigos.spotify_artist.data.network.network_entities.albums
 
-import com.example.jaimequeraltgarrigos.spotify_artist.data.network.network_entities.artists.Artist
+import com.example.jaimequeraltgarrigos.spotify_artist.data.network.network_entities.artists.ArtistAPI
 import com.example.jaimequeraltgarrigos.spotify_artist.data.network.network_entities.artists.Images
 import com.google.gson.annotations.SerializedName
 
-data class Album (
+data class AlbumAPI (
 
 	@SerializedName("album_group") val album_group : String,
 	@SerializedName("album_type") val album_type : String,
-	@SerializedName("artists") val artists : List<Artist>,
+	@SerializedName("artists") val artistAPIS : List<ArtistAPI>,
 	@SerializedName("href") val href : String,
 	@SerializedName("id") val id : String,
 	@SerializedName("images") val images : List<Images>,

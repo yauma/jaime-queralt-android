@@ -7,15 +7,15 @@ import androidx.room.Relation
 
 @Entity
 data class Artist(
-    @PrimaryKey val artistId: Long,
+    @PrimaryKey val artistId: String,
     val artistName: String,
     val artistImageUrl: String
 )
 
 @Entity
 data class Album(
-    @PrimaryKey val albumId: Long,
-    val artistOwnerId: Long,
+    @PrimaryKey val albumId: String,
+    val artistOwnerId: String,
     val albumName: String,
     val albumUrl: String
 )
