@@ -49,13 +49,12 @@ class LoginActivity : AppCompatActivity() {
         } else if (requestCode == AUTH_TOKEN_REQUEST_CODE) {
             mAccessToken = response.accessToken
             TokenManager.token = mAccessToken
-            navigateToMainActivity(mAccessToken)
+            navigateToMainActivity()
         }
     }
 
-    private fun navigateToMainActivity(mAccessToken: String?) {
+    private fun navigateToMainActivity() {
         val intent = Intent(applicationContext, MainActivity::class.java)
-        intent.putExtra(getString(R.string.AccessToken), mAccessToken)
         startActivity(intent)
     }
 }

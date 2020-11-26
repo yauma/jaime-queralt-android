@@ -1,15 +1,13 @@
 package com.example.jaimequeraltgarrigos.spotify_artist.ui.search
 
-import android.app.DownloadManager
 import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
+import com.example.jaimequeraltgarrigos.spotify_artist.repository.ArtistError
 import com.example.jaimequeraltgarrigos.spotify_artist.repository.ArtistRepositoryImpl
+import com.example.jaimequeraltgarrigos.spotify_artist.utils.asNetworkException
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -19,15 +17,53 @@ class SearchViewModel @ViewModelInject constructor(
 ) : ViewModel() {
     val artists = repositoryImpl.artists
 
-    fun artistSearch(query: String) {
-        viewModelScope.launch {
-            withContext(Dispatchers.IO){
-                fetchArtist(query)
+    private val _snackBar = MutableLiveData<String?>()
+
+    val snackbar: LiveData<String?>
+        get() = _snackBar
+
+    private val _spinner = MutableLiveData<Boolean>(false)
+
+    val spinner: LiveData<Boolean>
+        get() = _spinner
+
+    /**
+     * Called immediately after the UI shows the snackbar.
+     */
+    fun onSnackbarShown() {
+        _snackBar.value = null
+    }
+
+    fun queryMade(query: String) {
+        launchDataLoad {
+            fetchArtist(query)
+        }
+    }
+
+    private suspend fun fetchArtist(query: String) {
+        repositoryImpl.fetchArtist(query)
+    }
+
+    private fun launchDataLoad(block: suspend () -> Unit): Job {
+        return viewModelScope.launch {
+            try {
+                _spinner.value = true
+                block()
+            } catch (error: ArtistError) {
+                _snackBar.value = error.message + error.cause?.let { asNetworkException(it) }
+            } finally {
+                _spinner.value = false
             }
         }
     }
 
-    suspend fun fetchArtist(query: String){
-        repositoryImpl.fetchArtist(query)
+    fun clearAdapter() {
+        launchDataLoad {
+            cleanCache()
+        }
+    }
+
+    private suspend fun cleanCache() {
+        repositoryImpl.cleanCache()
     }
 }

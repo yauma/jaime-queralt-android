@@ -32,5 +32,5 @@ class AppModule {
         dataBase: ArtistDataBase,
         network: MainNetwork
     ) =
-        ArtistRepositoryImpl(dataBase.artistDao, network)
+        ArtistRepositoryImpl(dataBase, network)
 }

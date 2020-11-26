@@ -9,20 +9,18 @@ import com.example.jaimequeraltgarrigos.spotify_artist.data.network.network_enti
 class Mapper {
     companion object {
         fun artistAPIToDBEntity(artist: ArtistAPI): Artist {
-            val url: String = try {
-                artist.images?.get(0)?.url ?: ""
-            } catch (e: Exception){
-                ""
+            var url = ""
+            if (artist.images != null && artist.images.isNotEmpty()) {
+                url = artist.images[0].url
             }
             return Artist(artist.id, artist.name, url)
         }
 
         //TODO test with multiple Artists ids
         fun albumAPIToDBEntity(album: AlbumAPI): Album {
-            val url: String = try {
-                album.images?.get(0)?.url ?: ""
-            } catch (e: Exception){
-                ""
+            var url = ""
+            if (album.images != null && album.images.isNotEmpty()) {
+                url = album.images[0].url
             }
             return Album(
                 album.id,

@@ -45,7 +45,7 @@ interface MainNetwork {
     suspend fun fetchArtists(
         @Query("q") query: String,
         @Query("type") type: String = "artist",
-        @Query("limit") limit: Int = 5
+        @Query("limit") limit: Int = 20
     ): ArtistSearchResponse
 
     @GET("v1/artists/{id}/albums")
