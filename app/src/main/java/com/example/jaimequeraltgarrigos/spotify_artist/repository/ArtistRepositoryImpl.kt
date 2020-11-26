@@ -3,7 +3,7 @@ package com.example.jaimequeraltgarrigos.spotify_artist.repository
 import com.example.jaimequeraltgarrigos.spotify_artist.data.database.ArtistDao
 import com.example.jaimequeraltgarrigos.spotify_artist.data.network.MainNetwork
 import com.example.jaimequeraltgarrigos.spotify_artist.data.network.network_entities.albums.AlbumAPI
-import com.example.jaimequeraltgarrigos.spotify_artist.utils.mapper.Mapper
+import com.example.jaimequeraltgarrigos.spotify_artist.utils.Mapper
 import kotlinx.coroutines.withTimeout
 
 class ArtistRepositoryImpl(
@@ -15,7 +15,6 @@ class ArtistRepositoryImpl(
     val artists = artistDao.getArtistWithAlbum()
 
     override suspend fun fetchArtist(query: String) {
-        val artistIds = mutableListOf<String>()
         try {
             val artistsSearchResponse = withTimeout(5000) {
                 network.fetchArtists(query)

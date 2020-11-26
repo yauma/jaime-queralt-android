@@ -1,16 +1,18 @@
 package com.example.jaimequeraltgarrigos.spotify_artist.ui.search
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.observe
+import android.widget.SearchView
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.*
 import com.example.jaimequeraltgarrigos.spotify_artist.R
 import com.example.jaimequeraltgarrigos.spotify_artist.ui.adapter.ArtistsAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.search_fragment.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.flow
 
 @AndroidEntryPoint
 class SearchFragment : Fragment() {
@@ -20,6 +22,7 @@ class SearchFragment : Fragment() {
     }
 
     private lateinit var viewModel: SearchViewModel
+    var queryTextChangedJob: Job? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,7 +39,28 @@ class SearchFragment : Fragment() {
         viewModel.artists.observe(this) {
             adapter.submitList(it)
         }
-        viewModel.onMainViewCreated()
+
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(query: String?): Boolean {
+                val length = query?.length ?: 0
+                return if (length > 3) {
+                    runBlocking {
+                        delay(300)
+                        query?.let { viewModel.artistSearch(it) }
+                    }
+                    true
+                } else {
+                    false
+                }
+
+            }
+
+        })
+
     }
 
     override fun onStart() {

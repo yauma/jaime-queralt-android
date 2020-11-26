@@ -7,7 +7,11 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.jaimequeraltgarrigos.spotify_artist.repository.ArtistRepositoryImpl
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class SearchViewModel @ViewModelInject constructor(
     private val repositoryImpl: ArtistRepositoryImpl,
@@ -15,13 +19,15 @@ class SearchViewModel @ViewModelInject constructor(
 ) : ViewModel() {
     val artists = repositoryImpl.artists
 
-    fun onMainViewCreated() {
+    fun artistSearch(query: String) {
         viewModelScope.launch {
-            fetchArtist("Muse")
+            withContext(Dispatchers.IO){
+                fetchArtist(query)
+            }
         }
     }
 
-    private suspend fun fetchArtist(query: String) {
+    suspend fun fetchArtist(query: String){
         repositoryImpl.fetchArtist(query)
     }
 }
