@@ -8,7 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.observe
 import com.example.jaimequeraltgarrigos.spotify_artist.R
+import com.example.jaimequeraltgarrigos.spotify_artist.ui.adapter.ArtistsAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.search_fragment.*
 
 @AndroidEntryPoint
 class SearchFragment : Fragment() {
@@ -29,8 +31,10 @@ class SearchFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(SearchViewModel::class.java)
-        viewModel.artists.observe(this){
-            print(it)
+        val adapter = ArtistsAdapter()
+        recyclerView.adapter = adapter
+        viewModel.artists.observe(this) {
+            adapter.submitList(it)
         }
         viewModel.onMainViewCreated()
     }
