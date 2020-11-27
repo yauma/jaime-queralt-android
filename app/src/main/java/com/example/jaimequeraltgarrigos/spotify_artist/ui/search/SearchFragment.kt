@@ -67,7 +67,7 @@ class SearchFragment : Fragment() {
                 return when {
                     length > 3 -> {
                         runBlocking {
-                            delay(100)
+                            delay(300)
                         }
                         viewModel.queryMade(query!!)
                         true

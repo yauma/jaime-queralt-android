@@ -27,6 +27,7 @@ class ArtistsAdapter : ListAdapter<ArtistWithAlbums, RecyclerView.ViewHolder>(Ar
         itemView: View
     ) : RecyclerView.ViewHolder(itemView) {
         fun bind(item: ArtistWithAlbums) {
+            itemView.artistTV.text = item.artist.artistName
             Glide
                 .with(itemView.context)
                 .load(item.artist.artistImageUrl)

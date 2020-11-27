@@ -27,6 +27,24 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:srcCompat="@tools:sample/avatars" />
 
+        <TextView
+            android:id="@+id/artistTV"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="TextView"
+            android:textAlignment="textEnd"
+            android:textColor="@color/white"
+            android:textIsSelectable="true"
+            android:textSize="36sp"
+            app:layout_constraintBottom_toBottomOf="@+id/artistIV"
+            app:layout_constraintEnd_toEndOf="@+id/artistIV"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="@+id/artistIV"
+            app:layout_constraintTop_toTopOf="@+id/artistIV"
+            app:layout_constraintVertical_bias="1.0" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/albumRecyclerView"
             android:layout_width="match_parent"
