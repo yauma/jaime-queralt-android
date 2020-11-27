@@ -1,9 +1,9 @@
 package com.example.jaimequeraltgarrigos.spotify_artist
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.example.jaimequeraltgarrigos.spotify_artist.utils.TokenManager
 import com.spotify.sdk.android.auth.AuthorizationClient
 import com.spotify.sdk.android.auth.AuthorizationRequest
 import com.spotify.sdk.android.auth.AuthorizationResponse
@@ -11,6 +11,7 @@ import com.spotify.sdk.android.auth.AuthorizationResponse
 
 class LoginActivity : AppCompatActivity() {
     private var mAccessToken: String = ""
+    private lateinit var myApplication: MyApplication
 
     companion object {
         private const val CLIENT_ID = "972b5264690045fba3744ed1adebf270"
@@ -23,7 +24,8 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         val request: AuthorizationRequest =
             getAuthenticationRequest(AuthorizationResponse.Type.TOKEN)
-        AuthorizationClient.openLoginActivity(this, LoginActivity.AUTH_TOKEN_REQUEST_CODE, request)
+        AuthorizationClient.openLoginActivity(this, AUTH_TOKEN_REQUEST_CODE, request)
+        myApplication = application as MyApplication
     }
 
     private fun getAuthenticationRequest(type: AuthorizationResponse.Type): AuthorizationRequest {
@@ -38,23 +40,21 @@ class LoginActivity : AppCompatActivity() {
             .build()
     }
 
-    private fun getRedirectUri(): Any {
-        return Uri.Builder()
-            .scheme(getString(R.string.com_spotify_sdk_redirect_scheme))
-            .authority(getString(R.string.com_spotify_sdk_redirect_host))
-            .build()
-    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         val response = AuthorizationClient.getResponse(resultCode, data)
 
-        if (response.error != null && !response.error.isEmpty()) {
-            val response = response.error
+        if (response.error != null && response.error.isNotEmpty()) {
             //TODO set error message
-        }
-        if (requestCode == LoginActivity.AUTH_TOKEN_REQUEST_CODE) {
+        } else if (requestCode == AUTH_TOKEN_REQUEST_CODE) {
             mAccessToken = response.accessToken
+            TokenManager.token = mAccessToken
+            navigateToMainActivity()
         }
+    }
+
+    private fun navigateToMainActivity() {
+        val intent = Intent(applicationContext, MainActivity::class.java)
+        startActivity(intent)
     }
 }
