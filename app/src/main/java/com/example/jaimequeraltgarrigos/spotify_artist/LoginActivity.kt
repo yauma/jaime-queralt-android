@@ -2,9 +2,11 @@ package com.example.jaimequeraltgarrigos.spotify_artist
 
 import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.eazypermissions.common.model.PermissionResult
 import com.eazypermissions.coroutinespermission.PermissionManager
@@ -33,7 +35,13 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         goldentifyQuery = intent?.getStringExtra(CalendarSyncWorker.DESCRIPTION)
-        checkForCalendarPermission()
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CALENDAR)
+            == PackageManager.PERMISSION_DENIED
+        ) {
+            checkForCalendarPermission()
+        }
+
         val request: AuthorizationRequest =
             getAuthenticationRequest(AuthorizationResponse.Type.TOKEN)
         AuthorizationClient.openLoginActivity(this, AUTH_TOKEN_REQUEST_CODE, request)
@@ -44,7 +52,6 @@ class LoginActivity : AppCompatActivity() {
     private fun checkForCalendarPermission() {
         lifecycleScope.launch {
             //CoroutineScope
-
             val permissionResult =
                 PermissionManager.requestPermissions(           //Suspends the coroutine
                     this@LoginActivity,
@@ -93,7 +100,12 @@ class LoginActivity : AppCompatActivity() {
         val response = AuthorizationClient.getResponse(resultCode, data)
 
         if (response.error != null && response.error.isNotEmpty()) {
-            //TODO set error message
+            Toast.makeText(
+                applicationContext,
+                "Please loggin to Spotify to search artists",
+                Toast.LENGTH_LONG
+            ).show()
+
         } else if (requestCode == AUTH_TOKEN_REQUEST_CODE) {
             mAccessToken = response.accessToken
             TokenManager.token = mAccessToken

@@ -1,27 +1,28 @@
 package com.example.jaimequeraltgarrigos.spotify_artist.ui.search
 
-import android.app.PendingIntent
-import android.database.Cursor
-import android.net.Uri
 import android.os.Bundle
-import android.provider.CalendarContract
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
-import android.widget.ToggleButton
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.observe
+import androidx.work.PeriodicWorkRequest
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import com.example.jaimequeraltgarrigos.spotify_artist.R
 import com.example.jaimequeraltgarrigos.spotify_artist.ui.adapter.ArtistsAdapter
+import com.example.jaimequeraltgarrigos.spotify_artist.work.CalendarSyncWorker
 import com.example.jaimequeraltgarrigos.spotify_artist.work.CalendarSyncWorker.Companion.DESCRIPTION
-import com.example.jaimequeraltgarrigos.spotify_artist.work.ReadCalendar
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.search_fragment.*
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import java.util.concurrent.TimeUnit
 
 
 @AndroidEntryPoint
@@ -33,6 +34,27 @@ class SearchFragment : Fragment() {
 
     private lateinit var viewModel: SearchViewModel
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        delayedInit()
+    }
+
+    private fun delayedInit() {
+        lifecycleScope.launch {
+            setupRecurringWork()
+        }
+    }
+
+    private fun setupRecurringWork() {
+        val repeatingRequest = PeriodicWorkRequestBuilder<CalendarSyncWorker>(
+            PeriodicWorkRequest.MIN_PERIODIC_INTERVAL_MILLIS,
+            TimeUnit.MINUTES
+        )
+            .build()
+
+        context?.let { WorkManager.getInstance(it).enqueue(repeatingRequest) }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -43,6 +65,7 @@ class SearchFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
         viewModel = ViewModelProvider(this).get(SearchViewModel::class.java)
         val adapter = ArtistsAdapter()
         recyclerView.adapter = adapter

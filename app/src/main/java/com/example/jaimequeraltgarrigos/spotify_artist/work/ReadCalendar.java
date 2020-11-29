@@ -8,6 +8,8 @@ import android.net.Uri;
 import android.provider.CalendarContract;
 import android.util.Log;
 
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -29,15 +31,17 @@ public class ReadCalendar {
 
             Uri.Builder builder = CalendarContract.Instances.CONTENT_URI.buildUpon();
 
-            Calendar beginTime = Calendar.getInstance();
-            long startMills = beginTime.getTimeInMillis();
+            long startMills = System.currentTimeMillis();
+            SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+            String start = sdfDate.format(startMills);
 
             Calendar endTime = Calendar.getInstance();
             endTime.set(2021, Calendar.SEPTEMBER, 2, 20, 0);
             long endMills = endTime.getTimeInMillis();
-
             ContentUris.appendId(builder, startMills);
             ContentUris.appendId(builder, endMills);
+
 
             Cursor eventCursor = contentResolver.query(builder.build(), new String[]{CalendarContract.Instances.TITLE,
                             CalendarContract.Instances.BEGIN, CalendarContract.Instances.END, CalendarContract.Instances.DESCRIPTION},
