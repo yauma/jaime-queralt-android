@@ -53,6 +53,8 @@ dependencies {
     implementation "androidx.recyclerview:recyclerview-selection:1.1.0-rc03"
     implementation "androidx.cardview:cardview:1.0.0"
     implementation 'androidx.browser:browser:1.2.0'
+    // WorkManager +Kotlin + coroutines
+    implementation "androidx.work:work-runtime-ktx:2.4.0"
     //lifecycle
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'

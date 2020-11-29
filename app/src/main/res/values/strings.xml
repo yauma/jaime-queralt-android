@@ -3,4 +3,6 @@
     <string name="com_spotify_sdk_redirect_scheme">spotify-sdk</string>
     <string name="com_spotify_sdk_redirect_host">auth</string>
     <string name="AccessToken">AccessToken</string>
+    <string name="notification_title">Goldentify</string>
+    <string name="notification_text">Search your favorite artist</string>
 </resources>

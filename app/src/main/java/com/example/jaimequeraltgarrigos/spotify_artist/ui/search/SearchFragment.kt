@@ -1,20 +1,28 @@
 package com.example.jaimequeraltgarrigos.spotify_artist.ui.search
 
+import android.app.PendingIntent
+import android.database.Cursor
+import android.net.Uri
 import android.os.Bundle
+import android.provider.CalendarContract
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
+import android.widget.ToggleButton
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import com.example.jaimequeraltgarrigos.spotify_artist.R
 import com.example.jaimequeraltgarrigos.spotify_artist.ui.adapter.ArtistsAdapter
+import com.example.jaimequeraltgarrigos.spotify_artist.work.CalendarSyncWorker.Companion.DESCRIPTION
+import com.example.jaimequeraltgarrigos.spotify_artist.work.ReadCalendar
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.search_fragment.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
+
 
 @AndroidEntryPoint
 class SearchFragment : Fragment() {
@@ -29,6 +37,7 @@ class SearchFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
         return inflater.inflate(R.layout.search_fragment, container, false)
     }
 
@@ -56,7 +65,11 @@ class SearchFragment : Fragment() {
             }
         }
 
-        searchView.isSubmitButtonEnabled = false
+        val goldentifyQuery = activity?.intent?.getStringExtra(DESCRIPTION)
+        if (goldentifyQuery != null && goldentifyQuery.length > 3) {
+            viewModel.queryMade(goldentifyQuery)
+        }
+
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return false
