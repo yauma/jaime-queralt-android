@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
+import com.example.jaimequeraltgarrigos.spotify_artist.LoginActivity
 import com.example.jaimequeraltgarrigos.spotify_artist.MainActivity
 import com.example.jaimequeraltgarrigos.spotify_artist.R
 import com.example.jaimequeraltgarrigos.spotify_artist.work.CalendarSyncWorker.Companion.NOTIFICATION_ID
@@ -22,7 +23,7 @@ class AlarmReceiver : BroadcastReceiver() {
     }
 
     private fun deliverNotification(context: Context, intent: Intent?) {
-        val contentIntent = Intent(context, MainActivity::class.java)
+        val contentIntent = Intent(context, LoginActivity::class.java)
         val goldentifyQuery = intent?.getStringExtra(CalendarSyncWorker.DESCRIPTION)
         contentIntent.putExtra(CalendarSyncWorker.DESCRIPTION, goldentifyQuery)
         val contentPendingIntent = PendingIntent.getActivity(

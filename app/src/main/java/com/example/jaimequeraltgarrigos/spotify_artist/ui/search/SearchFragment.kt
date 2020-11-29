@@ -67,6 +67,8 @@ class SearchFragment : Fragment() {
 
         val goldentifyQuery = activity?.intent?.getStringExtra(DESCRIPTION)
         if (goldentifyQuery != null && goldentifyQuery.length > 3) {
+            searchView.setQuery(goldentifyQuery, false)
+            searchView.clearFocus()
             viewModel.queryMade(goldentifyQuery)
         }
 

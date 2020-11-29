@@ -5,21 +5,19 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
+import android.content.Context.ALARM_SERVICE
 import android.content.Intent
 import android.graphics.Color
-import android.os.Build
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import java.text.SimpleDateFormat
+
 
 class CalendarSyncWorker(val context: Context, parameters: WorkerParameters) :
     CoroutineWorker(context, parameters) {
 
     companion object {
-        const val WORK_NAME =
-            "com.example.jaimequeraltgarrigos.spotify_artist.work.calendarsyncworker"
         const val NOTIFICATION_ID = 0
         const val DESCRIPTION = "Description"
 
@@ -31,38 +29,46 @@ class CalendarSyncWorker(val context: Context, parameters: WorkerParameters) :
     override suspend fun doWork(): Result {
         withContext(Dispatchers.IO) {
             val artistList = ReadCalendar.readCalendar(context)
-            initScheduler(artistList.first())
+            initScheduler(artistList)
         }
         return Result.success()
     }
 
-    private fun initScheduler(artistCalendarEvent: ArtistCalendarEvent) {
-        val notifyIntent = Intent(context, AlarmReceiver::class.java)
-        notifyIntent.putExtra(DESCRIPTION, artistCalendarEvent.description)
+    private fun initScheduler(artistCalendarEvents: List<ArtistCalendarEvent>) {
+        val alarmManagers = arrayOfNulls<AlarmManager>(artistCalendarEvents.size)
+        val intents = arrayOfNulls<Intent>(artistCalendarEvents.size)
 
-        val notifyPendingIntent = PendingIntent.getBroadcast(
-            context, NOTIFICATION_ID, notifyIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT
-        )
-
-        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        alarmManager.setExact(
-            AlarmManager.RTC,
-            artistCalendarEvent.begin, notifyPendingIntent
-        )
+        for (i in alarmManagers.indices) {
+            val notifyIntent = Intent(context, AlarmReceiver::class.java)
+            notifyIntent.putExtra(DESCRIPTION, artistCalendarEvents[i].description)
+            intents[i] = notifyIntent
+            val pendingIntent: PendingIntent = PendingIntent.getBroadcast(
+                context, i,
+                intents[i], 0
+            )
+            alarmManagers[i] = applicationContext.getSystemService(ALARM_SERVICE) as AlarmManager
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
+                alarmManagers[i]!!.setExact(
+                    AlarmManager.RTC_WAKEUP,
+                    artistCalendarEvents[i].begin, pendingIntent
+                )
+            }
+        }
 
         val mNotificationManager =
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         // Notification channels are only available in OREO and higher.
-        // So, add a check on SDK version.
-
-        // Create the NotificationChannel with all the parameters.
-        val notificationChannel = NotificationChannel(
-            PRIMARY_CHANNEL_ID,
-            "Artist Search Alert",
-            NotificationManager.IMPORTANCE_HIGH
-        )
+        val notificationChannel =
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                NotificationChannel(
+                    PRIMARY_CHANNEL_ID,
+                    "Artist Search Alert",
+                    NotificationManager.IMPORTANCE_HIGH
+                )
+            } else {
+                TODO("VERSION.SDK_INT < O")
+            }
         notificationChannel.enableLights(true)
         notificationChannel.lightColor = Color.RED
         notificationChannel.enableVibration(true)

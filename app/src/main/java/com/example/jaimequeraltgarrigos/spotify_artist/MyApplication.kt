@@ -3,6 +3,7 @@ package com.example.jaimequeraltgarrigos.spotify_artist
 import android.app.Application
 import android.os.Build
 import androidx.work.*
+import androidx.work.PeriodicWorkRequest.MIN_PERIODIC_INTERVAL_MILLIS
 import com.example.jaimequeraltgarrigos.spotify_artist.work.CalendarSyncWorker
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
@@ -33,16 +34,15 @@ class MyApplication : Application() {
     }
 
     /**
-     * Setup WorkManager background job to 'fetch' new network data daily.
+     * Setup WorkManager background job to 'fetch' new "GOLDENTIFY" Calendar events.
      */
     private fun setupRecurringWork() {
 
-        val repeatingRequest = OneTimeWorkRequestBuilder<CalendarSyncWorker>()
+        val repeatingRequest = PeriodicWorkRequestBuilder<CalendarSyncWorker>(
+            MIN_PERIODIC_INTERVAL_MILLIS,
+            TimeUnit.MINUTES
+        )
             .build()
-
-/*        val repeatingRequest = PeriodicWorkRequestBuilder<CalendarSyncWorker>(1, TimeUnit.DAYS)
-            .setConstraints(constraints)
-            .build()*/
 
         WorkManager.getInstance(this).enqueue(repeatingRequest)
     }
