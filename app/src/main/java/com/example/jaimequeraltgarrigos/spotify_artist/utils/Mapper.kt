@@ -11,7 +11,7 @@ class Mapper {
         fun artistAPIToDBEntity(artist: ArtistAPI): Artist {
             var url = ""
             if (artist.images != null && artist.images.isNotEmpty()) {
-                url = artist.images[0].url
+                url = artist.images[1].url
             }
             return Artist(artist.id, artist.name, url)
         }
@@ -20,7 +20,7 @@ class Mapper {
         fun albumAPIToDBEntity(album: AlbumAPI): Album {
             var url = ""
             if (album.images != null && album.images.isNotEmpty()) {
-                url = album.images[0].url
+                url = album.images[1].url
             }
             return Album(
                 album.id,

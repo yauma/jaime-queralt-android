@@ -17,4 +17,6 @@ class MainActivity : AppCompatActivity() {
                 .commitNow()
         }
     }
+
+    override fun onBackPressed(){}
 }

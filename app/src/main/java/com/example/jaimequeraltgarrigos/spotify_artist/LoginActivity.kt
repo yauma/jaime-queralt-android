@@ -32,7 +32,7 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_login)
 
         goldentifyQuery = intent?.getStringExtra(CalendarSyncWorker.DESCRIPTION)
 
@@ -118,6 +118,7 @@ class LoginActivity : AppCompatActivity() {
         if (goldentifyQuery != null) {
             intent.putExtra(CalendarSyncWorker.DESCRIPTION, goldentifyQuery)
         }
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(intent)
     }
 }
