@@ -5,8 +5,7 @@
 * Search app to find artists and their respectives albums in the spotify Api 
   https://developer.spotify.com/documentation/web-api/
 * Background service syncs with google calendar to retrieve custom Events with the keyword "GOLDENTIFY" and notifies user with a notification.
-When the user click on that notification the app open with the query set on the calendar description.
-* TODO implement album tracks and filter for duration tracks
+  When the user click on that notification the app open with the query set on the calendar description.
 
 ## Libraries used in this application
 * Kotlin Coroutines: for concurrency https://developer.android.com/kotlin/coroutines
@@ -66,9 +65,19 @@ WorkManager offers the following benefits:
   * Lets you set constraints on when the task runs
   * Guarantees task execution, even if the app or device restarts
   
-A Periodic Work Request is set every 15 minutes to check the calendar if a new event matching the requisites is created and generates an alarm with Alarm Manager that will trigger a notification that will open the app with query to be excuted
+A Periodic Work Request is set every 15 minutes to check the calendar if a new event matching the requisites is created and generates an alarm with Alarm Manager that will trigger a notification that will open the app with query to be excuted.
 
+## Spotify Autorization
+In order to make authorized requests to the Spotify platform requires that you are granted permission to access data.
+For that purpose we use the Android SDK Spotify https://developer.spotify.com/documentation/android/quick-start/
 
+## TODO List
+List of improvement to do:
+* Implement album tracks and filter for duration tracks
+* Create an infinite scroll list using Paging librarty: https://developer.android.com/topic/libraries/architecture/paging
+* Details Screen for the artists
+* UI Testing with Espresso library: https://developer.android.com/training/testing/espresso
+* Improving UI code with Jetpack Compose library: https://developer.android.com/jetpack/compose
 
 
 
