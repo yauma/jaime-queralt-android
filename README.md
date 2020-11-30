@@ -26,6 +26,24 @@ https://developer.android.com/topic/libraries/architecture
 
 <img width="500" alt="Architecture Diagram" src="https://user-images.githubusercontent.com/10743855/100661226-e7c82600-3331-11eb-8b4f-801b8c449528.png">
 
-* The project structure follows the Android Architecture guidelines
+* The project structure follows the Android Architecture guidelines and the principles of separation of concernes
 
 <img width="146" alt="Project Structure" src="https://user-images.githubusercontent.com/10743855/100661688-92404900-3332-11eb-9337-04eb06ca3f97.png">
+
+* Single Source of truth
+
+It's common for different REST API endpoints to return the same data. For example, in the Spotify API if we geta list of artists, the same artist object could come from a different API endpoint, for example when you get albums
+For this reason, our Repository implementation saves web service responses into the database. 
+Changes to the database then trigger callbacks on active LiveData objects. Using this model, the database serves as the single source of truth, and other parts of the app access it using our Repository. 
+So in our case the Data Base is the single source of truth and all the data shown in the UI came from the DB.
+
+## Testing
+One key benefit of the separation of concerns is testability. 
+Also Dependency Injection makes the code easy to test, to reuse and maintain.
+
+* ViewModel: Testing the SearchViewModel class using a JUnit test. 
+
+* ArtistRepository: 
+  * The repository makes the correct web service calls.
+  * The repository saves results into the database.
+  * The repository doesn't make unnecessary requests if the data is cached and up to date.z
