@@ -2,7 +2,7 @@
 
 ## About this project:
 
-* Search app to find Artist and their respectives albums in the spotify Api 
+* Search app to find artists and their respectives albums in the spotify Api 
   https://developer.spotify.com/documentation/web-api/
 * Background service syncs with google calendar to retrieve custom Events with the keyword "GOLDENTIFY" and notifies user with a notification.
 When the user click on that notification the app open with the query set on the calendar description.
