@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.observe
+import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequest
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
@@ -47,12 +48,14 @@ class SearchFragment : Fragment() {
 
     private fun setupRecurringWork() {
         val repeatingRequest = PeriodicWorkRequestBuilder<CalendarSyncWorker>(
-            PeriodicWorkRequest.MIN_PERIODIC_INTERVAL_MILLIS,
-            TimeUnit.MINUTES
+            17, TimeUnit.MINUTES
         )
             .build()
 
-        context?.let { WorkManager.getInstance(it).enqueue(repeatingRequest) }
+        WorkManager.getInstance().enqueueUniquePeriodicWork(
+            CalendarSyncWorker.WORK_NAME,
+            ExistingPeriodicWorkPolicy.KEEP,
+            repeatingRequest)
     }
 
     override fun onCreateView(
@@ -69,6 +72,7 @@ class SearchFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(SearchViewModel::class.java)
         val adapter = ArtistsAdapter()
         recyclerView.adapter = adapter
+
         viewModel.artists.observe(this) {
             adapter.submitList(it)
         }

@@ -20,12 +20,13 @@ class CalendarSyncWorker(val context: Context, parameters: WorkerParameters) :
     companion object {
         const val NOTIFICATION_ID = 0
         const val DESCRIPTION = "Description"
+        const val WORK_NAME =
+            "com.example.jaimequeraltgarrigos.spotify_artist.work.CalendarSyncWorker"
 
         // Notification channel ID.
         const val PRIMARY_CHANNEL_ID = "primary_notification_channel"
     }
 
-    //TODO ask user permision calendar
     override suspend fun doWork(): Result {
         withContext(Dispatchers.IO) {
             val artistList = ReadCalendar.readCalendar(context)
