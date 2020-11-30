@@ -11,10 +11,15 @@ When the user click on that notification the app open with the query set on the 
 ## Libraries used in this application
 * Kotlin Coroutines: for concurrency https://developer.android.com/kotlin/coroutines
 * Android JetPack Components https://developer.android.com/jetpack
-  * WorkManager background scheduling needs.
+  * WorkManager for background scheduling needs.
   * Room for data storage persistence.
   * Dependency Injection using Hilt Improve app scalability and testing with simplified dependency injection
 
 * Retrofit: for HTTP client https://square.github.io/retrofit/
 * Glide: for image download https://github.com/bumptech/glide
 * Mockito: for Unit Testing https://site.mockito.org
+
+## Architecture
+This project implements the Android recommended architecture using Architecture Components 
+https://developer.android.com/topic/libraries/architecture
+* The following diagram shows how all the modules should interact with one another after designing the app:
