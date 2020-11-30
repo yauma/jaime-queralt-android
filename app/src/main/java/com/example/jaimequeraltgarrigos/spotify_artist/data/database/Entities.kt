@@ -26,5 +26,5 @@ data class ArtistWithAlbums(
         parentColumn = "artistId",
         entityColumn = "artistOwnerId"
     )
-    val albums: List<Album>
+    var albums: List<Album>
 )

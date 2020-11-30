@@ -10,11 +10,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.observe
 import androidx.work.ExistingPeriodicWorkPolicy
-import androidx.work.PeriodicWorkRequest
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.example.jaimequeraltgarrigos.spotify_artist.R
 import com.example.jaimequeraltgarrigos.spotify_artist.ui.adapter.ArtistsAdapter
+import com.example.jaimequeraltgarrigos.spotify_artist.ui.viewmodel.SearchViewModel
 import com.example.jaimequeraltgarrigos.spotify_artist.work.CalendarSyncWorker
 import com.example.jaimequeraltgarrigos.spotify_artist.work.CalendarSyncWorker.Companion.DESCRIPTION
 import com.google.android.material.snackbar.Snackbar
@@ -54,7 +54,7 @@ class SearchFragment : Fragment() {
 
         WorkManager.getInstance().enqueueUniquePeriodicWork(
             CalendarSyncWorker.WORK_NAME,
-            ExistingPeriodicWorkPolicy.KEEP,
+            ExistingPeriodicWorkPolicy.REPLACE,
             repeatingRequest)
     }
 
