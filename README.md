@@ -52,3 +52,23 @@ We have covered 100% of lines for the SearchViewModel and the ArtistRepository w
 
 <img width="357" alt="Captura de Pantalla 2020-11-30 a la(s) 12 09 02" src="https://user-images.githubusercontent.com/10743855/100671884-f1588a80-333f-11eb-9179-807edf90f2e0.png">
 
+## Calendar background work
+In order to schedule tasks to sync with the Google Calendar events that match with "Goldentify" word that triggers a notification and a query in the app we use
+* WorkManager: https://developer.android.com/topic/libraries/architecture/workmanager
+
+WorkManager is an Android Jetpack library that runs deferrable, guaranteed background work when the work’s constraints are satisfied. It is the current best practice for this kind of work on Android.
+
+WorkManager offers the following benefits:
+  * Handles compatibility with different OS versions
+  * Follows system health best practices
+  * Supports asynchronous one-off and periodic tasks
+  * Supports chained tasks with input/output
+  * Lets you set constraints on when the task runs
+  * Guarantees task execution, even if the app or device restarts
+  
+A Periodic Work Request is set every 15 minutes to check the calendar if a new event matching the requisites is created and generates an alarm with Alarm Manager that will trigger a notification that will open the app with query to be excuted
+
+
+
+
+
