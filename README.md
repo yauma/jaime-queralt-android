@@ -1,5 +1,7 @@
 # Spotify Artist Search Sample App
 
+<img width="200" alt="Captura de Pantalla" src="https://user-images.githubusercontent.com/10743855/100676856-78116580-3348-11eb-877d-6ec1bf73c6da.png">
+
 ## About this project:
 
 * Search app to find artists and their respectives albums in the spotify Api 
