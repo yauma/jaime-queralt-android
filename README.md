@@ -23,3 +23,9 @@ When the user click on that notification the app open with the query set on the 
 This project implements the Android recommended architecture using Architecture Components 
 https://developer.android.com/topic/libraries/architecture
 * The following diagram shows how all the modules should interact with one another after designing the app:
+
+<img width="500" alt="Architecture Diagram" src="https://user-images.githubusercontent.com/10743855/100661226-e7c82600-3331-11eb-8b4f-801b8c449528.png">
+
+* The project structure follows the Android Architecture guidelines
+
+<img width="146" alt="Project Structure" src="https://user-images.githubusercontent.com/10743855/100661688-92404900-3332-11eb-9337-04eb06ca3f97.png">
