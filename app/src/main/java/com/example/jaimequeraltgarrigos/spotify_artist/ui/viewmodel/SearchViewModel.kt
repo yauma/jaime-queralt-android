@@ -1,4 +1,4 @@
-package com.example.jaimequeraltgarrigos.spotify_artist.ui.search
+package com.example.jaimequeraltgarrigos.spotify_artist.ui.viewmodel
 
 import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
@@ -6,10 +6,8 @@ import androidx.lifecycle.*
 import com.example.jaimequeraltgarrigos.spotify_artist.repository.ArtistError
 import com.example.jaimequeraltgarrigos.spotify_artist.repository.ArtistRepositoryImpl
 import com.example.jaimequeraltgarrigos.spotify_artist.utils.asNetworkException
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class SearchViewModel @ViewModelInject constructor(
     private val repositoryImpl: ArtistRepositoryImpl,

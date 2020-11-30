@@ -3,12 +3,15 @@ package com.example.jaimequeraltgarrigos.spotify_artist.repository
 import com.example.jaimequeraltgarrigos.spotify_artist.data.database.ArtistDataBase
 import com.example.jaimequeraltgarrigos.spotify_artist.data.network.MainNetwork
 import com.example.jaimequeraltgarrigos.spotify_artist.data.network.network_entities.albums.AlbumAPI
+import com.example.jaimequeraltgarrigos.spotify_artist.di.IoDispatcher
 import com.example.jaimequeraltgarrigos.spotify_artist.utils.Mapper
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
 
 class ArtistRepositoryImpl(
+    @IoDispatcher private val defaultDispatcher: CoroutineDispatcher,
     private val artistDB: ArtistDataBase,
     private val network: MainNetwork
 ) :
@@ -17,7 +20,7 @@ class ArtistRepositoryImpl(
     val artists = artistDao.getArtistWithAlbum()
 
     override suspend fun fetchArtist(query: String) {
-        withContext(Dispatchers.IO) {
+        withContext(defaultDispatcher) {
             try {
                 cleanCache()
                 val artistsSearchResponse = withTimeout(5000) {
@@ -37,7 +40,7 @@ class ArtistRepositoryImpl(
     }
 
     suspend fun cleanCache() {
-        withContext(Dispatchers.IO) {
+        withContext(defaultDispatcher) {
             artistDB.clearAllTables()
         }
     }

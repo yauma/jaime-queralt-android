@@ -7,14 +7,24 @@ import android.view.ViewGroup
 import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.observe
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import com.example.jaimequeraltgarrigos.spotify_artist.R
 import com.example.jaimequeraltgarrigos.spotify_artist.ui.adapter.ArtistsAdapter
+import com.example.jaimequeraltgarrigos.spotify_artist.ui.viewmodel.SearchViewModel
+import com.example.jaimequeraltgarrigos.spotify_artist.work.CalendarSyncWorker
+import com.example.jaimequeraltgarrigos.spotify_artist.work.CalendarSyncWorker.Companion.DESCRIPTION
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.search_fragment.*
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import java.util.concurrent.TimeUnit
+
 
 @AndroidEntryPoint
 class SearchFragment : Fragment() {
@@ -25,18 +35,44 @@ class SearchFragment : Fragment() {
 
     private lateinit var viewModel: SearchViewModel
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        delayedInit()
+    }
+
+    private fun delayedInit() {
+        lifecycleScope.launch {
+            setupRecurringWork()
+        }
+    }
+
+    private fun setupRecurringWork() {
+        val repeatingRequest = PeriodicWorkRequestBuilder<CalendarSyncWorker>(
+            17, TimeUnit.MINUTES
+        )
+            .build()
+
+        WorkManager.getInstance().enqueueUniquePeriodicWork(
+            CalendarSyncWorker.WORK_NAME,
+            ExistingPeriodicWorkPolicy.REPLACE,
+            repeatingRequest)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
         return inflater.inflate(R.layout.search_fragment, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
         viewModel = ViewModelProvider(this).get(SearchViewModel::class.java)
         val adapter = ArtistsAdapter()
         recyclerView.adapter = adapter
+
         viewModel.artists.observe(this) {
             adapter.submitList(it)
         }
@@ -56,7 +92,13 @@ class SearchFragment : Fragment() {
             }
         }
 
-        searchView.isSubmitButtonEnabled = false
+        val goldentifyQuery = activity?.intent?.getStringExtra(DESCRIPTION)
+        if (goldentifyQuery != null && goldentifyQuery.length > 3) {
+            searchView.setQuery(goldentifyQuery, false)
+            searchView.clearFocus()
+            viewModel.queryMade(goldentifyQuery)
+        }
+
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return false

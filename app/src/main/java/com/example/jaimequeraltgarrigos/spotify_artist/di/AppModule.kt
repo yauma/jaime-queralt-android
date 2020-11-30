@@ -11,6 +11,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ApplicationComponent
+import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Singleton
 
 @Module
@@ -29,8 +30,9 @@ class AppModule {
     @Provides
     @Singleton
     fun artistRepositoryProvider(
+        @IoDispatcher dispatcher: CoroutineDispatcher,
         dataBase: ArtistDataBase,
         network: MainNetwork
     ) =
-        ArtistRepositoryImpl(dataBase, network)
+        ArtistRepositoryImpl(dispatcher, dataBase, network)
 }
