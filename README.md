@@ -49,6 +49,7 @@ Also Dependency Injection makes the code easy to test, to reuse and maintain.
   * The repository saves results into the database.
   
 We have covered 100% of lines for the SearchViewModel and the ArtistRepository where most of the logic of the application happens.
+
 <img width="337" alt="Captura de Pantalla 2020-11-30 a la(s) 12 09 13" src="https://user-images.githubusercontent.com/10743855/100671877-ef8ec700-333f-11eb-8f20-98d57aa7b0b9.png">
 
 <img width="357" alt="Captura de Pantalla 2020-11-30 a la(s) 12 09 02" src="https://user-images.githubusercontent.com/10743855/100671884-f1588a80-333f-11eb-9179-807edf90f2e0.png">
