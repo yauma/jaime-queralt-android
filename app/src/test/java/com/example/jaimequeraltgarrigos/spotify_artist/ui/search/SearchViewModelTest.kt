@@ -10,7 +10,6 @@ import com.example.jaimequeraltgarrigos.spotify_artist.data.database.ArtistWithA
 import com.example.jaimequeraltgarrigos.spotify_artist.data.network.MainNetwork
 import com.example.jaimequeraltgarrigos.spotify_artist.getOrAwaitValue
 import com.example.jaimequeraltgarrigos.spotify_artist.repository.ArtistRepositoryImpl
-import com.example.jaimequeraltgarrigos.spotify_artist.ui.viewmodel.SearchViewModel
 import junit.framework.TestCase
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.runBlockingTest

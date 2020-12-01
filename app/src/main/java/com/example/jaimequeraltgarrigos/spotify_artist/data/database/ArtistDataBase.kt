@@ -5,7 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [Artist::class, Album::class], version = 1, exportSchema = false)
+@Database(entities = [Artist::class, Album::class, Song::class, AlbumSongCrossRef::class], version = 1, exportSchema = false)
 abstract class ArtistDataBase : RoomDatabase() {
     abstract val artistDao: ArtistDao
 }

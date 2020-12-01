@@ -1,4 +1,4 @@
-package com.example.jaimequeraltgarrigos.spotify_artist.ui.viewmodel
+package com.example.jaimequeraltgarrigos.spotify_artist.ui.search
 
 import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
