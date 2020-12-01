@@ -14,7 +14,7 @@ import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.example.jaimequeraltgarrigos.spotify_artist.R
 import com.example.jaimequeraltgarrigos.spotify_artist.ui.adapter.ArtistsAdapter
-import com.example.jaimequeraltgarrigos.spotify_artist.ui.viewmodel.SearchViewModel
+import com.example.jaimequeraltgarrigos.spotify_artist.ui.search.SearchViewModel
 import com.example.jaimequeraltgarrigos.spotify_artist.work.CalendarSyncWorker
 import com.example.jaimequeraltgarrigos.spotify_artist.work.CalendarSyncWorker.Companion.DESCRIPTION
 import com.google.android.material.snackbar.Snackbar
@@ -85,7 +85,6 @@ class SearchFragment : Fragment() {
             }
         }
 
-        // show the spinner when [MainViewModel.spinner] is true
         viewModel.spinner.observe(this) { value ->
             value.let { show ->
                 progressBar.visibility = if (show) View.VISIBLE else View.GONE

@@ -8,10 +8,11 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.jaimequeraltgarrigos.spotify_artist.R
-import com.example.jaimequeraltgarrigos.spotify_artist.data.database.ArtistWithAlbums
+import com.example.jaimequeraltgarrigos.spotify_artist.data.database.ArtistWithAlbumsAndSongs
 import kotlinx.android.synthetic.main.cardview_artists.view.*
 
-class ArtistsAdapter : ListAdapter<ArtistWithAlbums, RecyclerView.ViewHolder>(ArtistDiffCallback()) {
+class ArtistsAdapter :
+    ListAdapter<ArtistWithAlbumsAndSongs, RecyclerView.ViewHolder>(ArtistDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.cardview_artists, parent, false)
@@ -26,7 +27,7 @@ class ArtistsAdapter : ListAdapter<ArtistWithAlbums, RecyclerView.ViewHolder>(Ar
     class ArtistViewHolder(
         itemView: View
     ) : RecyclerView.ViewHolder(itemView) {
-        fun bind(item: ArtistWithAlbums) {
+        fun bind(item: ArtistWithAlbumsAndSongs) {
             itemView.artistTV.text = item.artist.artistName
             Glide
                 .with(itemView.context)
@@ -41,12 +42,19 @@ class ArtistsAdapter : ListAdapter<ArtistWithAlbums, RecyclerView.ViewHolder>(Ar
     }
 }
 
-private class ArtistDiffCallback : DiffUtil.ItemCallback<ArtistWithAlbums>() {
-    override fun areItemsTheSame(oldItem: ArtistWithAlbums, newItem: ArtistWithAlbums): Boolean {
-        return oldItem.artist.artistId == newItem.artist.artistId
+//TODO create reduce funcion for checking albums ids
+private class ArtistDiffCallback : DiffUtil.ItemCallback<ArtistWithAlbumsAndSongs>() {
+    override fun areItemsTheSame(
+        oldItem: ArtistWithAlbumsAndSongs,
+        newItem: ArtistWithAlbumsAndSongs
+    ): Boolean {
+        return (oldItem.artist.artistId == newItem.artist.artistId)
     }
 
-    override fun areContentsTheSame(oldItem: ArtistWithAlbums, newItem: ArtistWithAlbums): Boolean {
+    override fun areContentsTheSame(
+        oldItem: ArtistWithAlbumsAndSongs,
+        newItem: ArtistWithAlbumsAndSongs
+    ): Boolean {
         return oldItem == newItem
     }
 }

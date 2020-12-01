@@ -2,9 +2,11 @@ package com.example.jaimequeraltgarrigos.spotify_artist.utils
 
 import com.example.jaimequeraltgarrigos.spotify_artist.data.database.Album
 import com.example.jaimequeraltgarrigos.spotify_artist.data.database.Artist
+import com.example.jaimequeraltgarrigos.spotify_artist.data.database.Song
 import com.example.jaimequeraltgarrigos.spotify_artist.data.network.network_entities.albums.AlbumAPI
 import com.example.jaimequeraltgarrigos.spotify_artist.data.network.network_entities.artists.ArtistAPI
 import com.example.jaimequeraltgarrigos.spotify_artist.data.network.network_entities.artists.Artists
+import com.example.jaimequeraltgarrigos.spotify_artist.data.network.network_entities.songs.SongAPI
 
 class Mapper {
     companion object {
@@ -16,7 +18,7 @@ class Mapper {
             return Artist(artist.id, artist.name, url)
         }
 
-        //TODO test with multiple Artists ids
+        //TODO Make resilent to nulls
         fun albumAPIToDBEntity(album: AlbumAPI): Album {
             var url = ""
             if (album.images != null && album.images.isNotEmpty()) {
@@ -28,6 +30,10 @@ class Mapper {
                 album.name,
                 url
             )
+        }
+
+        fun songApiTODBEntity(song: SongAPI): Song {
+            return Song(song.id, song.name, "", song.durationMs.toString())
         }
 
         fun artistsAPIListToDBEntityList(artists: List<ArtistAPI>): List<Artist> {
@@ -44,6 +50,22 @@ class Mapper {
                     it
                 )
             }
+        }
+
+        fun songsAPIListToDBEntityList(songs: List<SongAPI>): List<Song> {
+            return songs.map {
+                songApiTODBEntity(
+                    it
+                )
+            }
+        }
+
+        fun albumSongsListToDBEntityList(songs: List<List<SongAPI>>): List<List<Song>> {
+            val listOfAlbumSongs = mutableListOf<List<Song>>()
+            songs.forEach {
+                listOfAlbumSongs.add(songsAPIListToDBEntityList(it))
+            }
+            return listOfAlbumSongs
         }
     }
 }

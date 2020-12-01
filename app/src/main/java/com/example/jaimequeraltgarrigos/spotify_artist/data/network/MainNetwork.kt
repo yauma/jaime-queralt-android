@@ -3,6 +3,7 @@ package com.example.jaimequeraltgarrigos.spotify_artist.data.network
 import android.content.SharedPreferences
 import com.example.jaimequeraltgarrigos.spotify_artist.data.network.network_entities.albums.AlbumsResponse
 import com.example.jaimequeraltgarrigos.spotify_artist.data.network.network_entities.artists.ArtistSearchResponse
+import com.example.jaimequeraltgarrigos.spotify_artist.data.network.network_entities.songs.SongsResponse
 import com.example.jaimequeraltgarrigos.spotify_artist.utils.TokenManager
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -50,6 +51,9 @@ interface MainNetwork {
 
     @GET("v1/artists/{id}/albums")
     suspend fun getAlbums(@Path("id") id: String): AlbumsResponse
+
+    @GET("v1/albums/{id}/tracks")
+    suspend fun getAlbumSongs(@Path("id") id: String): SongsResponse
 }
 
 class MyRetrofitInterceptor(private val token: String?) : Interceptor {

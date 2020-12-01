@@ -8,10 +8,10 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.jaimequeraltgarrigos.spotify_artist.R
-import com.example.jaimequeraltgarrigos.spotify_artist.data.database.Album
+import com.example.jaimequeraltgarrigos.spotify_artist.data.database.AlbumWithSongs
 import kotlinx.android.synthetic.main.cardview_albums.view.*
 
-class AlbumsAdapter : ListAdapter<Album, RecyclerView.ViewHolder>(AlbumsDiffCallback()) {
+class AlbumsAdapter : ListAdapter<AlbumWithSongs, RecyclerView.ViewHolder>(AlbumsDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.cardview_albums, parent, false)
@@ -26,25 +26,25 @@ class AlbumsAdapter : ListAdapter<Album, RecyclerView.ViewHolder>(AlbumsDiffCall
     class AlbumViewHolder(
         itemView: View
     ) : RecyclerView.ViewHolder(itemView) {
-        fun bind(album: Album) {
+        fun bind(albumWithSongs: AlbumWithSongs) {
             Glide
                 .with(itemView.context)
-                .load(album.albumUrl)
+                .load(albumWithSongs.album.albumUrl)
                 .centerCrop()
                 .placeholder(R.drawable.progress_animation)
                 .into(itemView.albumIV)
-            itemView.albumTitleTV.text = album.albumName
+            itemView.albumTitleTV.text = albumWithSongs.album.albumName
         }
     }
 }
 
-private class AlbumsDiffCallback : DiffUtil.ItemCallback<Album>() {
+private class AlbumsDiffCallback : DiffUtil.ItemCallback<AlbumWithSongs>() {
 
-    override fun areItemsTheSame(oldItem: Album, newItem: Album): Boolean {
-        return oldItem.albumId == newItem.albumId
+    override fun areItemsTheSame(oldItem: AlbumWithSongs, newItem: AlbumWithSongs): Boolean {
+        return oldItem.album.albumId == newItem.album.albumId
     }
 
-    override fun areContentsTheSame(oldItem: Album, newItem: Album): Boolean {
+    override fun areContentsTheSame(oldItem: AlbumWithSongs, newItem: AlbumWithSongs): Boolean {
         return oldItem == newItem
     }
 }
