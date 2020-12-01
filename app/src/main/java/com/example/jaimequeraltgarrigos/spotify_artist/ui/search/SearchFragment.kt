@@ -55,7 +55,8 @@ class SearchFragment : Fragment() {
         WorkManager.getInstance().enqueueUniquePeriodicWork(
             CalendarSyncWorker.WORK_NAME,
             ExistingPeriodicWorkPolicy.REPLACE,
-            repeatingRequest)
+            repeatingRequest
+        )
     }
 
     override fun onCreateView(
@@ -98,18 +99,17 @@ class SearchFragment : Fragment() {
             viewModel.queryMade(goldentifyQuery)
         }
 
+        searchView.isSubmitButtonEnabled = true
+
+        searchView.setOnCloseListener {
+            viewModel.clearAdapter()
+            true
+        }
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                return false
-            }
-
-            override fun onQueryTextChange(query: String?): Boolean {
                 val length = query?.length ?: -1
                 return when {
                     length > 3 -> {
-                        runBlocking {
-                            delay(300)
-                        }
                         viewModel.queryMade(query!!)
                         true
                     }
@@ -121,6 +121,10 @@ class SearchFragment : Fragment() {
                         false
                     }
                 }
+            }
+
+            override fun onQueryTextChange(query: String?): Boolean {
+                return false
             }
         })
     }

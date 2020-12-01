@@ -10,6 +10,7 @@ import com.bumptech.glide.Glide
 import com.example.jaimequeraltgarrigos.spotify_artist.R
 import com.example.jaimequeraltgarrigos.spotify_artist.data.database.AlbumWithSongs
 import kotlinx.android.synthetic.main.cardview_albums.view.*
+import kotlinx.android.synthetic.main.cardview_artists.view.*
 
 class AlbumsAdapter : ListAdapter<AlbumWithSongs, RecyclerView.ViewHolder>(AlbumsDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -34,6 +35,9 @@ class AlbumsAdapter : ListAdapter<AlbumWithSongs, RecyclerView.ViewHolder>(Album
                 .placeholder(R.drawable.progress_animation)
                 .into(itemView.albumIV)
             itemView.albumTitleTV.text = albumWithSongs.album.albumName
+            val songsAdapter = SongsAdapter()
+            itemView.songsRecyclerView.adapter = songsAdapter
+            songsAdapter.submitList(albumWithSongs.songs)
         }
     }
 }

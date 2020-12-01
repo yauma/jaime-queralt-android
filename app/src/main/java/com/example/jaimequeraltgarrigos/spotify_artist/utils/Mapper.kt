@@ -2,7 +2,9 @@ package com.example.jaimequeraltgarrigos.spotify_artist.utils
 
 import com.example.jaimequeraltgarrigos.spotify_artist.data.database.Album
 import com.example.jaimequeraltgarrigos.spotify_artist.data.database.Artist
+import com.example.jaimequeraltgarrigos.spotify_artist.data.database.ArtistWithAlbumsAndSongs
 import com.example.jaimequeraltgarrigos.spotify_artist.data.database.Song
+import com.example.jaimequeraltgarrigos.spotify_artist.data.network.network_entities.ArtistsWithAlbumAndSongsAPI
 import com.example.jaimequeraltgarrigos.spotify_artist.data.network.network_entities.albums.AlbumAPI
 import com.example.jaimequeraltgarrigos.spotify_artist.data.network.network_entities.artists.ArtistAPI
 import com.example.jaimequeraltgarrigos.spotify_artist.data.network.network_entities.artists.Artists
@@ -60,12 +62,5 @@ class Mapper {
             }
         }
 
-        fun albumSongsListToDBEntityList(songs: List<List<SongAPI>>): List<List<Song>> {
-            val listOfAlbumSongs = mutableListOf<List<Song>>()
-            songs.forEach {
-                listOfAlbumSongs.add(songsAPIListToDBEntityList(it))
-            }
-            return listOfAlbumSongs
-        }
     }
 }
