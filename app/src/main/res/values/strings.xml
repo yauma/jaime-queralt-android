@@ -5,4 +5,5 @@
     <string name="AccessToken">AccessToken</string>
     <string name="notification_title">Goldentify</string>
     <string name="notification_text">Search your favorite artist</string>
+    <string name="dash_sign">-</string>
 </resources>

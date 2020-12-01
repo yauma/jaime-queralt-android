@@ -31,8 +31,9 @@ class AppModule {
     @Singleton
     fun artistRepositoryProvider(
         @IoDispatcher dispatcher: CoroutineDispatcher,
+        @DefaultDispatcher defaultDispatcher: CoroutineDispatcher,
         dataBase: ArtistDataBase,
         network: MainNetwork
     ) =
-        ArtistRepositoryImpl(dispatcher, dataBase, network)
+        ArtistRepositoryImpl(dispatcher, defaultDispatcher, dataBase, network)
 }
