@@ -47,7 +47,7 @@ data class AlbumWithSongs(
         entityColumn = "songId",
         associateBy = Junction(AlbumSongCrossRef::class)
     )
-    val songs: List<Song>
+    var songs: List<Song>
 )
 
 data class ArtistWithAlbumsAndSongs(
@@ -57,5 +57,5 @@ data class ArtistWithAlbumsAndSongs(
         parentColumn = "artistId",
         entityColumn = "artistOwnerId"
     )
-    val albums: List<AlbumWithSongs>
+    var albums: List<AlbumWithSongs>
 )
