@@ -1,6 +1,6 @@
 # Spotify Artist Search Sample App
 
-<img width="200" alt="Captura de Pantalla" src="https://user-images.githubusercontent.com/10743855/100676856-78116580-3348-11eb-877d-6ec1bf73c6da.png">
+<img width="200" alt="Captura de Pantalla" src="https://user-images.githubusercontent.com/10743855/100926235-dd3c9680-34c1-11eb-9f30-fda9d82097d1.png">
 
 ## About this project:
 
@@ -82,5 +82,5 @@ List of improvement to do:
 * UI Testing with Espresso library: https://developer.android.com/training/testing/espresso
 * Improving UI code with Jetpack Compose library: https://developer.android.com/jetpack/compose
 
-
-
+## Updates 12-02-2020
+Album songs are displayed and a filter for searching albums
