@@ -12,7 +12,6 @@ import kotlinx.coroutines.*
 
 class ArtistRepositoryImpl(
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
-    @DefaultDispatcher private val defaultDispatcher: CoroutineDispatcher,
     private val artistDB: ArtistDataBase,
     private val network: MainNetwork
 ) :
@@ -27,7 +26,9 @@ class ArtistRepositoryImpl(
 
                 val artists: List<ArtistAPI> = withTimeout(5000) {
                     network.fetchArtists(query)
-                }.artists.items
+                }.artists.items.filter {
+                    it.images?.isNotEmpty() == true
+                }
                 artistDao.insertArtists(Mapper.artistsAPIListToDBEntityList(artists))
 
                 val albums: List<AlbumAPI> = artists.flatMap {
