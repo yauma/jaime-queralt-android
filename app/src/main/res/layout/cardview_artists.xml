@@ -17,7 +17,6 @@
             android:layout_height="210dp"
 
             android:background="#00000000"
-            app:layout_constraintBottom_toTopOf="@+id/albumRecyclerView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -45,11 +44,24 @@
             android:id="@+id/albumRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:layoutManager="LinearLayoutManager"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/searchViewAlbums"
+            tools:listitem="@layout/cardview_albums" />
+
+        <SearchView
+            android:id="@+id/searchViewAlbums"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/artistIV"
-            app:layoutManager="LinearLayoutManager"
-            tools:listitem="@layout/cardview_albums"/>
+            app:layout_constraintTop_toBottomOf="@+id/artistIV" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>

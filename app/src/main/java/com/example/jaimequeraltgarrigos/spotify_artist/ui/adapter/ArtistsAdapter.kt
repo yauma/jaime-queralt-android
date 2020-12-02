@@ -3,6 +3,7 @@ package com.example.jaimequeraltgarrigos.spotify_artist.ui.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -37,7 +38,18 @@ class ArtistsAdapter :
                 .into(itemView.artistIV)
             val albumsAdapter = AlbumsAdapter()
             itemView.albumRecyclerView.adapter = albumsAdapter
-            albumsAdapter.submitList(item.albums)
+            albumsAdapter.modifyList(item.albums)
+            itemView.searchViewAlbums.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String): Boolean {
+
+                    return false
+                }
+
+                override fun onQueryTextChange(newText: String): Boolean {
+                    albumsAdapter.filter(newText)
+                    return true
+                }
+            })
         }
     }
 }
