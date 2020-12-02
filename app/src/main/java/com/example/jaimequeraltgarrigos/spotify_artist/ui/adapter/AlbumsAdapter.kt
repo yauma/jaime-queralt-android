@@ -3,6 +3,8 @@ package com.example.jaimequeraltgarrigos.spotify_artist.ui.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Filter
+import android.widget.Filterable
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -11,8 +13,18 @@ import com.example.jaimequeraltgarrigos.spotify_artist.R
 import com.example.jaimequeraltgarrigos.spotify_artist.data.database.AlbumWithSongs
 import kotlinx.android.synthetic.main.cardview_albums.view.*
 import kotlinx.android.synthetic.main.cardview_artists.view.*
+import java.util.*
+import kotlin.collections.ArrayList
 
 class AlbumsAdapter : ListAdapter<AlbumWithSongs, RecyclerView.ViewHolder>(AlbumsDiffCallback()) {
+
+    private var unfilteredList: List<AlbumWithSongs> = listOf<AlbumWithSongs>()
+
+    fun modifyList(list: List<AlbumWithSongs>) {
+        unfilteredList = list
+        submitList(list)
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.cardview_albums, parent, false)
@@ -40,15 +52,36 @@ class AlbumsAdapter : ListAdapter<AlbumWithSongs, RecyclerView.ViewHolder>(Album
             songsAdapter.submitList(albumWithSongs.songs)
         }
     }
-}
 
-private class AlbumsDiffCallback : DiffUtil.ItemCallback<AlbumWithSongs>() {
+    fun filter(query: CharSequence?) {
+        val list = mutableListOf<AlbumWithSongs>()
 
-    override fun areItemsTheSame(oldItem: AlbumWithSongs, newItem: AlbumWithSongs): Boolean {
-        return oldItem.album.albumId == newItem.album.albumId
+        // perform the data filtering
+        if (!query.isNullOrEmpty()) {
+            list.addAll(unfilteredList.filter {
+                it.album.albumName.toLowerCase(Locale.getDefault())
+                    .contains(query.toString().toLowerCase(Locale.getDefault()))
+            })
+        } else {
+            list.addAll(unfilteredList)
+        }
+        submitList(list)
     }
 
-    override fun areContentsTheSame(oldItem: AlbumWithSongs, newItem: AlbumWithSongs): Boolean {
-        return oldItem == newItem
+    private class AlbumsDiffCallback : DiffUtil.ItemCallback<AlbumWithSongs>() {
+
+        override fun areItemsTheSame(
+            oldItem: AlbumWithSongs,
+            newItem: AlbumWithSongs
+        ): Boolean {
+            return oldItem.album.albumId == newItem.album.albumId
+        }
+
+        override fun areContentsTheSame(
+            oldItem: AlbumWithSongs,
+            newItem: AlbumWithSongs
+        ): Boolean {
+            return oldItem == newItem
+        }
     }
 }
