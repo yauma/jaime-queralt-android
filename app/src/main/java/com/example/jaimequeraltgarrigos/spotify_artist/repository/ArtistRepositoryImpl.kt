@@ -2,9 +2,8 @@ package com.example.jaimequeraltgarrigos.spotify_artist.repository
 
 import com.example.jaimequeraltgarrigos.spotify_artist.data.database.*
 import com.example.jaimequeraltgarrigos.spotify_artist.data.network.MainNetwork
-import com.example.jaimequeraltgarrigos.spotify_artist.data.network.network_entities.AlbumWithSongsAPI
-import com.example.jaimequeraltgarrigos.spotify_artist.data.network.network_entities.ArtistsWithAlbumAndSongsAPI
 import com.example.jaimequeraltgarrigos.spotify_artist.data.network.network_entities.albums.AlbumAPI
+import com.example.jaimequeraltgarrigos.spotify_artist.data.network.network_entities.artists.ArtistAPI
 import com.example.jaimequeraltgarrigos.spotify_artist.data.network.network_entities.songs.SongAPI
 import com.example.jaimequeraltgarrigos.spotify_artist.di.DefaultDispatcher
 import com.example.jaimequeraltgarrigos.spotify_artist.di.IoDispatcher
@@ -25,44 +24,29 @@ class ArtistRepositoryImpl(
         withContext(ioDispatcher) {
             try {
                 cleanCache()
-                val response: List<ArtistsWithAlbumAndSongsAPI> = withTimeout(5000) {
+
+                val artists: List<ArtistAPI> = withTimeout(5000) {
                     network.fetchArtists(query)
-                }.artists.items.map { artist ->
-                    val albums = network.getAlbums(artist.id).items.map {
-                        AlbumWithSongsAPI(it, network.getAlbumSongs(it.id).items)
-                    }
-                    ArtistsWithAlbumAndSongsAPI(artist, albums)
-                }
+                }.artists.items
+                artistDao.insertArtists(Mapper.artistsAPIListToDBEntityList(artists))
 
-                response.forEach {
-                    println(it.toString())
-                }
-
-                /*val artists: List<Artist> = withTimeout(5000) {
-                    network.fetchArtists(query)
-                }.artists.items.map {
-                    Mapper.artistAPIToDBEntity(it)
-                }
-                //artistDao.insertArtists(Mapper.artistsAPIListToDBEntityList(artistsSearchResponse.artists.items))
-
-                val albums = artists.flatMap {
-                    network.getAlbums(it.artistId).items
+                val albums: List<AlbumAPI> = artists.flatMap {
+                    network.getAlbums(it.id).items
                 }.distinctBy {
                     it.name
-                }.map {
-                    Mapper.albumAPIToDBEntity(it)
                 }
-                //artistDao.insertAlbums(Mapper.albumAPIListToDBEntityList(albumsApi))
+                artistDao.insertAlbums(Mapper.albumAPIListToDBEntityList(albums))
 
-                val listAlbumSongs: List<List<Song>> = albums.map { album ->
-                    async {
-                        network.getAlbumSongs(album.albumId).items
+                val songCrossRef = mutableListOf<AlbumSongCrossRef>()
+                val songs: List<SongAPI> = albums.flatMap { album ->
+                    val songsNetwork = network.getAlbumSongs(album.id).items
+                    songsNetwork.forEach { song ->
+                        songCrossRef.add(AlbumSongCrossRef(album.id, song.id))
                     }
-                }.map {
-                    it.await()
-                }.map {
-                    Mapper.songsAPIListToDBEntityList(it)
-                }*/
+                    songsNetwork
+                }
+                artistDao.insertSongsList(Mapper.songsAPIListToDBEntityList(songs))
+                artistDao.insertAlbumSongCrossReferenceList(songCrossRef)
 
             } catch (error: Throwable) {
                 throw ArtistError("Unable to fetch Artists ", error)
@@ -71,18 +55,9 @@ class ArtistRepositoryImpl(
     }
 
     suspend fun cleanCache() {
-        artistDB.clearAllTables()
-    }
-}
-
-/*suspend fun fetchItems(itemIds: List<AlbumAPI>): Map<AlbumAPI, List<SongAPI>> {
-    val itemById = mutableMapOf<Long, Item>()
-    coroutineScope {
-        itemIds.forEach { itemId ->
-            launch { itemById[itemId] = MyService.getItem(itemId) }
+        withContext(ioDispatcher) {
+            artistDB.clearAllTables()
         }
     }
-    return itemById
-}*/
-
+}
 class ArtistError(message: String, cause: Throwable?) : Throwable(message, cause)

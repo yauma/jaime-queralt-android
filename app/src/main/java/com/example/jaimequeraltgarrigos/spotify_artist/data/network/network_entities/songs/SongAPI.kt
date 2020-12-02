@@ -13,4 +13,5 @@ data class SongAPI(
     val id: String = "",
     @SerializedName("name")
     val name: String = "",
+    val albumId: String = ""
 )

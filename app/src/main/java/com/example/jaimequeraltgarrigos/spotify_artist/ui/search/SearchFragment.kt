@@ -1,9 +1,11 @@
 package com.example.jaimequeraltgarrigos.spotify_artist.ui.search
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -14,15 +16,13 @@ import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.example.jaimequeraltgarrigos.spotify_artist.R
 import com.example.jaimequeraltgarrigos.spotify_artist.ui.adapter.ArtistsAdapter
-import com.example.jaimequeraltgarrigos.spotify_artist.ui.search.SearchViewModel
+import com.example.jaimequeraltgarrigos.spotify_artist.utils.hideKeyboard
 import com.example.jaimequeraltgarrigos.spotify_artist.work.CalendarSyncWorker
 import com.example.jaimequeraltgarrigos.spotify_artist.work.CalendarSyncWorker.Companion.DESCRIPTION
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.search_fragment.*
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import java.util.concurrent.TimeUnit
 
 
@@ -111,6 +111,7 @@ class SearchFragment : Fragment() {
                 return when {
                     length > 3 -> {
                         viewModel.queryMade(query!!)
+                        hideKeyboard()
                         true
                     }
                     length == 0 -> {
