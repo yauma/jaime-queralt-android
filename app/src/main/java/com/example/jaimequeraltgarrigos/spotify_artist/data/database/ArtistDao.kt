@@ -23,5 +23,8 @@ interface ArtistDao {
     suspend fun insertSongsList(artists: List<Song>)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertAlbumSongCrossReferenceList(albumSongCrossRef: List<AlbumSongCrossRef>)
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAlbumSongCrossReference(albumSongCrossRef: AlbumSongCrossRef)
 }
