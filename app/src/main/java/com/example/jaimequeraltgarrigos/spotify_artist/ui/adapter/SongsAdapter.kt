@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.jaimequeraltgarrigos.spotify_artist.R
 import com.example.jaimequeraltgarrigos.spotify_artist.data.database.Song
 import kotlinx.android.synthetic.main.cardview_songs.view.*
+import java.util.concurrent.TimeUnit
 
 class SongsAdapter : ListAdapter<Song, RecyclerView.ViewHolder>(SongsDiffCallback()) {
 
@@ -26,13 +27,11 @@ class SongsAdapter : ListAdapter<Song, RecyclerView.ViewHolder>(SongsDiffCallbac
     class SongViewHolder(
         itemView: View
     ) : RecyclerView.ViewHolder(itemView) {
+
         fun bind(song: Song) {
             itemView.songNameTV.text = song.songName
+            itemView.lengthTV.text = convertMillisToSongFormat(song.length)
         }
-    }
-
-    private fun convertMillosToSongFormat(long: Long): String{
-        return ""
     }
 }
 
@@ -45,4 +44,13 @@ private class SongsDiffCallback : DiffUtil.ItemCallback<Song>() {
     override fun areContentsTheSame(oldItem: Song, newItem: Song): Boolean {
         return oldItem == newItem
     }
+}
+
+fun convertMillisToSongFormat(length: Long): String {
+    return String.format(
+        "%d m : %d s",
+        TimeUnit.MILLISECONDS.toMinutes(length),
+        TimeUnit.MILLISECONDS.toSeconds(length) -
+                TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(length))
+    )
 }

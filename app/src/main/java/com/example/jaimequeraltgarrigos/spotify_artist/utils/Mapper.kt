@@ -32,7 +32,7 @@ class Mapper {
         }
 
         fun songApiTODBEntity(song: SongAPI): Song {
-            return Song(song.id, song.name, "", song.durationMs.toString())
+            return Song(song.id, song.name, "", song.durationMs)
         }
 
         fun artistsAPIListToDBEntityList(artists: List<ArtistAPI>): List<Artist> {

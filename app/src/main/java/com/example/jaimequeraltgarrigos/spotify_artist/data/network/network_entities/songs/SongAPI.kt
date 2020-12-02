@@ -8,7 +8,7 @@ data class SongAPI(
     @SerializedName("disc_number")
     val discNumber: Int = 0,
     @SerializedName("duration_ms")
-    val durationMs: Int = 0,
+    val durationMs: Long = 0,
     @SerializedName("id")
     val id: String = "",
     @SerializedName("name")

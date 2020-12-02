@@ -22,7 +22,7 @@ data class Song(
     @PrimaryKey val songId: String,
     val songName: String,
     val artist: String,
-    val length: String
+    val length: Long
 )
 
 @Entity(primaryKeys = ["albumId", "songId"])

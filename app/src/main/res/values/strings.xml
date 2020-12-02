@@ -6,4 +6,5 @@
     <string name="notification_title">Goldentify</string>
     <string name="notification_text">Search your favorite artist</string>
     <string name="dash_sign">-</string>
+    <string name="search_album">Search album</string>
 </resources>
