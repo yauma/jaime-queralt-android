@@ -105,7 +105,7 @@ class LoginActivity : AppCompatActivity() {
                 "Please loggin to Spotify to search artists",
                 Toast.LENGTH_LONG
             ).show()
-
+            navigateToMainActivity()
         } else if (requestCode == AUTH_TOKEN_REQUEST_CODE) {
             mAccessToken = response.accessToken
             TokenManager.token = mAccessToken
