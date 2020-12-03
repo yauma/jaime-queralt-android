@@ -76,7 +76,7 @@ For that purpose we use the Android SDK Spotify https://developer.spotify.com/do
 
 ## TODO List
 List of improvement to do:
-* Implement album tracks and filter for duration tracks
+* <s>Implement album tracks and filter for duration tracks</s>
 * Create an infinite scroll list using Paging librarty: https://developer.android.com/topic/libraries/architecture/paging
 * Details Screen for the artists
 * UI Testing with Espresso library: https://developer.android.com/training/testing/espresso
